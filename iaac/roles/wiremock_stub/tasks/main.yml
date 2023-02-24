@@ -1,0 +1,11 @@
+- name: Copy wiremock stub application
+  copy:
+    src: wiremock-jre8-standalone-2.31.0.jar
+    dest: /opt/agile-practices-application/
+    mode: u=rwx,g=rwx,o=rwx
+
+- name: Copy wiremock config
+  copy:
+    src: legacyAccountingSystemResponse.json
+    dest: /opt/agile-practices-application/mappings/
+    mode: u=rwx,g=rwx,o=rwx

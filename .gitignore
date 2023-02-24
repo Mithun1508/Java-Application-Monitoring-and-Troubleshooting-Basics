@@ -1,0 +1,16 @@
+# IntelliJ
+.idea/
+
+*.iml
+*.ipr
+*.iws
+
+out/
+.idea_modules/
+
+# Maven
+target/
+
+# App
+*.log
+log/

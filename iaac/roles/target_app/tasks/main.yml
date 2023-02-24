@@ -1,0 +1,9 @@
+- name: Copy demo application for monitoring
+  copy:
+    src: "{{ item }}"
+    dest: /opt/agile-practices-application/
+    mode: u=rwx,g=rwx,o=rwx
+  with_items:
+    - dbo-1.0-SNAPSHOT.jar
+    - start-app.sh
+    - stop-app.sh

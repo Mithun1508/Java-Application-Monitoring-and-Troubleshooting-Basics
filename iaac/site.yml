@@ -1,0 +1,50 @@
+- hosts: prod
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: Add software
+      dnf:
+        state: present
+        name:
+          - java-11-openjdk-devel
+          - docker
+
+    - name: Add working dir
+      file:
+        path: /opt/agile-practices-application
+        state: directory
+        owner: "{{ ansible_user }}"
+        mode: u+rw,g+rw,o+rw
+        recurse: yes
+
+    - name: Add prometheus config
+      template:
+        src: prometheus.yml.j2
+        dest: /opt/agile-practices-application/prometheus.yml
+        mode: a+r
+
+    - name: Docker repo login
+      command: docker login --username {{ ansible_user }} --password {{ ansible_pass }} artifactory.raiffeisen.ru
+
+    - name: Run node exporter
+      command: |
+        docker run --rm -d -p 9100:9100 
+        -v /sys:/host/sys:ro -v /proc:/host/proc:ro -v /:/rootfs:ro 
+        artifactory.raiffeisen.ru/ext-techimage-docker/prometheus/node-exporter:v1.1.1
+
+    - name: Run prometheus
+      command: |
+        docker run --rm -d -p 9090:9090 
+        -v /opt/agile-practices-application/prometheus.yml:/etc/prometheus/prometheus.yml:ro 
+        artifactory.raiffeisen.ru/ext-techimage-docker/prometheus/prometheus:v2.35.0
+
+    - name: Run grafana
+      command: |
+        docker run --rm -d -p 3000:3000 
+        artifactory.raiffeisen.ru/ext-techimage-docker/grafana:6.4.3 
+        
+
+  roles:
+    - role: target_app
+    - role: wiremock_stub

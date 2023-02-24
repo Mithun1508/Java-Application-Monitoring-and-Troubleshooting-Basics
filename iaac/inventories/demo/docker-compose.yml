@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  node_exporter:
+    image: prom/node-exporter:v1.4.0
+    networks:
+      - app_monitoring
+    ports:
+      - "9100:9100"
+    command:
+      - '--path.rootfs=/host'
+
+  prometheus:
+    image: prom/prometheus:v2.39.1
+    networks:
+      - app_monitoring
+    ports:
+      - "9090:9090"
+    volumes:
+      - '/root/java-application-monitoring-and-troubleshooting/iaac/inventories/demo/prometheus.yml:/etc/prometheus/prometheus.yml:z'
+
+  grafana:
+    image: grafana/grafana:9.2.3
+    networks:
+      - app_monitoring
+    ports:
+      - "3000:3000"
+
+  app:
+    build: ../../roles/target_app/files
+    image: ekr26/demo-app:1.0.0
+    networks:
+      - app_monitoring
+    ports:
+      - "8080:8080"
+      - "9999:9999"
+
+networks:
+  app_monitoring:
