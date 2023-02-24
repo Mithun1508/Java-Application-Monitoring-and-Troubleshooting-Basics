@@ -154,7 +154,7 @@ Installation at Windows:
 - [ ] Satisfied [prerequisites](#Prerequisites) 
 - [x] Cloned locally training content
 ```shell script
-git clone --depth 1 --branch master https://github.com/eugene-krivosheyev/java-application-monitoring-and-troubleshooting
+git clone --depth 1 --branch master https://github.com/Mithun1508/Java-Application-Monitoring-and-Troubleshooting-Basics
 cd java-application-monitoring-and-troubleshooting
 ```
 
